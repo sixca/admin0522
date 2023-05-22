@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- C > project > logs 폴더를 만들어서 log를 저장하겠습니다 -->
+    <property name="LOGS_DIR" value="c://project/logs" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+<!--            <Pattern>[%d{MM-dd HH:mm:ss}][%thread] %-5level %logger{36} - %msg%n</Pattern>-->
+            <Pattern>[%d{MM-dd HH:mm:ss}] %-5level %logger{36} - %msg%n</Pattern>
+        </layout>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS_DIR}/logback.log</file>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGS_DIR}/logback.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>5MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <appender name="FILE2" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS_DIR}/cartinfo.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss}, %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGS_DIR}/cartinfo.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>5MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <appender name="FILE3" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS_DIR}/sumcart.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss}, %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGS_DIR}/sumcart.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>5MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!--    <root level="ERROR"> &lt;!&ndash; 추가함 : ERROR 인 경우만 화면에 출력된다 &ndash;&gt;-->
+    <root level="INFO"> <!-- 추가함 : ERROR 인 경우만 화면에 출력된다 -->
+        <appender-ref ref="STDOUT" />
+    </root>
+
+    <logger name="org.springframework.web" level="DEBUG">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <!-- ScheduleController 클래스에서 만들어지는 것을 FILE2에 저장하겠다 -->
+    <logger name="com.kbstar.controller.ScheduleController" level="INFO">
+        <appender-ref ref="FILE2" />
+    </logger>
+    <!-- ItemController 클래스에서 만들어지는 것을 FILE3에 저장하겠다 -->
+    <logger name="com.kbstar.controller.ItemController" level="INFO">
+        <appender-ref ref="FILE3" />
+    </logger>
+
+    <logger name="jdbc" level="OFF" />
+	<logger name="jdbc.sqlonly" level="INFO" />
+	<logger name="jdbc.sqltiming" level="DEBUG" />
+	<logger name="jdbc.audit" level="OFF" />
+	<logger name="jdbc.resultset" level="DEBUG" />
+	<logger name="jdbc.resultsettable" level="INFO" />
+	<logger name="jdbc.connection" level="OFF" />
+
+    <!-- INFO(trace > debug > info > warn > error)  -->
+</configuration>
